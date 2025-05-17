@@ -23,9 +23,9 @@ public class KeyExchangeManager {
             KeyPair keyPair = keyGen.generateKeyPair();
             this.publicKey = keyPair.getPublic();
             this.privateKey = keyPair.getPrivate();
-            System.out.println("🔐 Diffie-Hellman Key Pair generated.");
+            System.out.println(" 🔐 Diffie-Hellman Key Pair generated.");
         } catch (Exception e) {
-            System.out.println("❌ Failed to generate DH key pair: " + e.getMessage());
+            System.out.println(" ❌ Failed to generate DH key pair: " + e.getMessage());
         }
     }
 
@@ -47,9 +47,9 @@ public class KeyExchangeManager {
             keyAgreement.doPhase(receivedPublicKey, true);
             byte[] secretBytes = keyAgreement.generateSecret();
             this.sharedSecret = new SecretKeySpec(secretBytes, 0, 16, "AES");
-            System.out.println("✅ Shared AES key generated.");
+            System.out.println(" ✅ Shared AES key generated.");
         } catch (Exception e) {
-            System.out.println("❌ Failed to generate shared secret: " + e.getMessage());
+            System.out.println(" ❌ Failed to generate shared secret: " + e.getMessage());
         }
     }
 
@@ -62,9 +62,9 @@ public class KeyExchangeManager {
     public void printSharedKey() {
         if (sharedSecret != null) {
             String base64Key = Base64.getEncoder().encodeToString(sharedSecret.getEncoded());
-            System.out.println("🔐 Shared AES Key (Base64): " + base64Key);
+            System.out.println(" 🔐 Shared AES Key (Base64): " + base64Key);
         } else {
-            System.out.println("⚠️ Shared key is null.");
+            System.out.println(" ⚠️ Shared key is null.");
         }
     }
 
