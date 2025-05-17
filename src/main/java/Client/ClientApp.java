@@ -12,7 +12,7 @@ public class ClientApp {
 
     public static void main(String[] args) {
         try {
-            System.out.println("🔐 Initializing SSL/TLS Client...");
+            System.out.println("🔐 Initializing SSL/TLS Client... ");
 
             KeyStore trustStore = KeyStore.getInstance("JKS");
             trustStore.load(new FileInputStream(TRUSTSTORE_LOCATION), TRUSTSTORE_PASSWORD.toCharArray());
