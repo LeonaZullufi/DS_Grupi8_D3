@@ -21,7 +21,6 @@ public class ServerApp {
         try {
             System.out.println("🔐 Initializing SSL/TLS Server...");
 
-            // ✅ Vendosja e protokollit TLSv1.2
             Security.setProperty("jdk.tls.server.protocols", "TLSv1.2");
 
             KeyStore keyStore = KeyStore.getInstance("JKS");
@@ -36,14 +35,14 @@ public class ServerApp {
             SSLServerSocketFactory sslServerSocketFactory = sslContext.getServerSocketFactory();
             SSLServerSocket sslServerSocket = (SSLServerSocket) sslServerSocketFactory.createServerSocket(PORT);
 
-            System.out.println("✅ SSL Server i nisur në portin: " + PORT);
+            System.out.println("✅ SSL Server started on port: " + PORT);
 
             while (true) {
-                System.out.println("⌛ Duke pritur për një klient...");
+                System.out.println("⌛ Waiting for a client...");
                 SSLSocket sslSocket = (SSLSocket) sslServerSocket.accept();
-                System.out.println("🌐 Klienti u lidh: " + sslSocket.getInetAddress());
+                System.out.println("🌐 The client connected: " + sslSocket.getInetAddress());
 
-                // ✅ Krijimi i Thread për çdo klient
+
                 new Thread(() -> handleClient(sslSocket)).start();
             }
         } catch (Exception e) {
@@ -61,25 +60,23 @@ public class ServerApp {
             while (true) {
                 String clientMessage = in.readLine();
                 if (clientMessage == null || clientMessage.equalsIgnoreCase("exit")) {
-                    System.out.println("❌ Klienti u shkëput.");
+                    System.out.println("❌ The client was disconnected.");
                     break;
                 }
 
-                // ✅ Kontrollojmë nëse është "ClientHello"
                 if (clientMessage.equals("ClientHello")) {
-                    System.out.println("📥 Klienti kërkoi: ClientHello");
+                    System.out.println("📥 The client requested: ClientHello");
                     out.println("ServerHello");
-                    System.out.println("📤 Serveri u përgjigj me: ServerHello");
+                    System.out.println("📤 The server responded with: ServerHello");
                     continue;
                 }
 
-                // ✅ Shfaqja e mesazhit
-                System.out.println("📥 Klienti: " + clientMessage);
+                System.out.println("📥 Client: " + clientMessage);
 
-                // ✅ Përgjigje
+
                 String response = "Server received: " + clientMessage;
                 out.println(response);
-                System.out.println("📤 Server: U dërgua përgjigja.");
+                System.out.println("📤 Server: The response was sent.");
             }
         } catch (IOException e) {
             System.out.println("❌ Error during communication: " + e.getMessage());

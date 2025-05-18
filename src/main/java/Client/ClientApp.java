@@ -15,10 +15,8 @@ public class ClientApp {
         try {
             System.out.println("🔐 Initializing SSL/TLS Client... ");
 
-            // ✅ Konfigurimi i protokollit TLS
             System.setProperty("jdk.tls.client.protocols", "TLSv1.2");
 
-            // Ngarkimi i TrustStore për të pranuar certifikatën e serverit
             KeyStore trustStore = KeyStore.getInstance("JKS");
             trustStore.load(new FileInputStream(TRUSTSTORE_LOCATION), TRUSTSTORE_PASSWORD.toCharArray());
 
@@ -28,14 +26,12 @@ public class ClientApp {
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
 
-            // Krijimi i SSLSocket për lidhje të sigurt
             SSLSocketFactory socketFactory = sslContext.getSocketFactory();
             SSLSocket sslSocket = (SSLSocket) socketFactory.createSocket(SERVER_HOST, SERVER_PORT);
 
-            // ✅ Startimi i Handshake
             sslSocket.startHandshake();
 
-            System.out.println("🌐 U lidh me serverin SSL në  " + SERVER_HOST + ":" + SERVER_PORT);
+            System.out.println("🌐 Connected to SSL server at  " + SERVER_HOST + ":" + SERVER_PORT);
 
             try (
                     BufferedReader in = new BufferedReader(new InputStreamReader(sslSocket.getInputStream()));
@@ -44,29 +40,25 @@ public class ClientApp {
             ) {
                 System.out.println("🔒 Secure channel established. Type 'exit' to disconnect.");
 
-                // ✅ 1️⃣ Dërgo ClientHello
-                System.out.println("📤 Dërgimi i mesazhit: ClientHello");
+                System.out.println("📤Sending the message: ClientHello");
                 out.println("ClientHello");
 
-                // ✅ 2️⃣ Leximi i ServerHello
                 String serverResponse = in.readLine();
-                System.out.println("📥 Përgjigje nga serveri: " + serverResponse);
+                System.out.println("📥 Server response: " + serverResponse);
 
                 if ("ServerHello".equals(serverResponse)) {
-                    System.out.println("🔄 ServerHello u pranua me sukses!");
+                    System.out.println("🔄 ServerHello was successfully received!");
 
                     // ✅ Fillimi i komunikimit të sigurt
                     while (true) {
-                        System.out.print("📝 Shkruaj mesazhin për serverin: ");
+                        System.out.print("📝 Write the message for the server: ");
                         String message = scanner.nextLine().trim();
 
-                        // ✅ Kontroll nëse është bosh
                         if (message.isEmpty()) {
-                            System.out.println("⚠️ Mesazhi nuk mund të jetë bosh. Provo përsëri.");
+                            System.out.println("⚠️The message cannot be empty. Please try again.");
                             continue;
                         }
 
-                        // ✅ Dërgo mesazhin te serveri
                         out.println(message);
 
                         if ("exit".equalsIgnoreCase(message)) {
@@ -81,7 +73,7 @@ public class ClientApp {
                             System.out.println("❌ Server disconnected.");
                             break;
                         }
-                        System.out.println("📥 Serveri u përgjigj: " + serverReply);
+                        System.out.println("📥 The server replied: " + serverReply);
                     }
                 } else {
                     System.out.println("❌ Expected ServerHello but received: " + serverResponse);
