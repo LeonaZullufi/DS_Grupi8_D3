@@ -1,7 +1,10 @@
 # DS_Grupi8_D3
 
 # 🔐 Simulimi i SSL/TLS Handshake me Verifikim të Certifikatave në Java
-Ky projekt demonstron një simulim të plotë të procesit të SSL/TLS handshake midis një klienti dhe serveri me verifikim të certifikatave.
+Ky projekt simulon një proces të plotë të SSL/TLS Handshake midis një **klienti** dhe një **serveri** duke përdorur teknologji të sigurisë së lartë. Përfshin:
+- Verifikimin e certifikatave X.509
+- Shkëmbimin e çelësave me Diffie-Hellman
+- Komunikimin e enkriptuar të sigurt
 
 ---
 
@@ -38,78 +41,96 @@ java -cp out client.ClientApp
 ## 📋 Udhëzime për përdorim
 Fillimisht nisni serverin
 Pastaj nisni klientin
-Ndiqni udhëzimet në ekran për të:
-Iniciuar handshake-in
-Verifikuar certifikatat
-Shkëmbyer mesazhe të sigurta
+Ndiqni udhëzimet në ekran për të shkëmbyer mesazhe të sigurta
 Shkruani "exit" për të mbyllur lidhjen
 
 
-🔄 Logjika e rrjedhës
+🔄 Logjika e rrjedhës\
 Kur ekzekutoni ServerApp:
-
-image
--🔐 Initializing SSL/TLS Server...
-✅ SSL Server i nisur në portin: 4433
-⌛ Duke pritur për një klient...
+![img.png](img.png)
 
 Kur ekzekutoni ClientApp pas ServerApp:
-🔐 Initializing SSL/TLS Client...
-🌐 U lidh me serverin SSL në  localhost:4433
-🔒 Secure channel established. Type 'exit' to disconnect.
-📤 Dërgimi i mesazhit: ClientHello
-📥 Përgjigje nga serveri: ServerHello
-🔄 ServerHello u pranua me sukses!
-Shkruaj mesazhin per serverin:
+![img_1.png](img_1.png)
+
+Shënoni kodin për serverin:
+![img_2.png](img_2.png)
+
+Pamja tek serveri:
+![img_3.png](img_3.png)
 
 
+## Përshkrimi i SSL TLS HANDSHAKE - HISTORIA
+SSL (Secure Sockets Layer) dhe TLS (Transport Layer Security) janë protokolle të sigurisë që ofrojnë komunikim të sigurt në rrjetet kompjuterike, si p.sh. në internet.
 
-# Përshkrimi i SSL TLS HANDSHAKE - HISTORIA
-## shkurt
+SSL u krijua fillimisht nga Netscape në vitin 1995 për të siguruar komunikim të sigurt mes shfletuesve të internetit dhe serverëve.
+
+TLS është evolucioni i SSL. TLS 1.0 u prezantua në vitin 1999 për të zëvendësuar SSL 3.0 me përmirësime të mëdha në siguri.
+
+Handshake është procesi fillestar kur një klient (browser, aplikacion) dhe serveri vendosin një sesion të sigurt. 
 
 ### 🔐 Procesi i SSL/TLS Handshake:
-ClientHello - Klienti nis lidhjen
-ServerHello - Serveri përgjigjet me certifikatën e tij
-Verifikimi i Certifikatës - Klienti verifikon certifikatën e serverit
-Shkëmbimi i Çelësave - Bëhet shkëmbimi i çelësave Diffie-Hellman
-Change Cipher Spec - Përcaktohen parametrat e enkriptimit
-Finished - Përfundon handshake-i dhe krijohet kanali i sigurt
+Klienti fillon Handshake duke dërguar versionin e TLS dhe algoritmet e mbështetura.
+Hapat:\
+ClientHello → Klienti fillon Handshake dhe propozon algoritmet.  
+ServerHello → Serveri përgjigjet dhe zgjedh parametrat e enkriptimit.  
+Certificate → Serveri dërgon certifikatën për verifikim.  
+ServerKeyExchange → Parametrat për shkëmbimin e çelësave.  
+ClientKeyExchange → Klienti gjeneron dhe dërgon çelësin e përkohshëm.  
+ChangeCipherSpec → Fillon enkriptimi i komunikimit.  
+Finished → Klienti dhe serveri konfirmojnë përfundimin.
 
+![img_4.png](img_4.png)
 # Përshkrimi i File-ve:
+📄 CertificateManager.java
 
-## CertificateManager.java
-Kjo klasë menaxhon ngarkimin dhe verifikimin e certifikatave X.509 për nevojat e simulimit të sigurisë SSL/TLS. Ajo ofron metoda për të lexuar certifikata nga file system (loadCertificate), për të ngarkuar një listë të certifikatave të besuara të CA-ve (loadTrustedCAs), si dhe për të verifikuar vlefshmërinë dhe nënshkrimin e një certifikate (verifyCertificate) kundrejt CA-ve të besuara.
+Ngarkon dhe verifikon certifikatat X.509.\
+Kontrollon nëse janë të nënshkruara nga një CA e besuar.
 
-## KeyExchangeManager.java
-Kjo klase simulon shkëmbimin e çelësave duke përdorur algoritmin Diffie-Hellman.
-Krijon çiftin e çelësave publik/privat dhe gjeneron një çelës të përbashkët AES në bazë të çelësit publik të palës tjetër (generateSharedSecret). Ky çelës përdoret më pas për komunikim të enkriptuar. Klasës gjithashtu ofron metoda për të aksesuar çelësat dhe për të printuar çelësin e përbashkët për qëllime debug.
+📄 KeyExchangeManager.java
 
-## HandshakeSimulator.java
-Kjo klasë simulon rrjedhën e plotë të një SSL/TLS handshake mes një klienti dhe serveri, duke përfshirë dërgimin e mesazheve ClientHello, ServerHello, ServerKeyExchange, ChangeCipherSpec dhe Finished. Gjatë simulimit, ajo përdor certifikatat e serverit dhe CA-ve, i verifikon ato, dhe simuluon shkëmbimin e çelësave për të krijuar një sesion të sigurt.
+Simulon shkëmbimin e çelësave me Diffie-Hellman.\
+Gjeneron një çelës të përbashkët AES për enkriptim.
 
+📄 HandshakeSimulator.java
 
-## ChangeCipherSpec.java
-Kjo klasë përfaqëson fazën e ChangeCipherSpec në protokollin SSL/TLS. Ajo dërgon një mesazh përmes një socket-i SSL për të sinjalizuar se komunikimi i ardhshëm do të bëhet duke përdorur çelësin e negociuar më parë gjatë handshake-it. Kjo është një hap kyç për të aktivizuar enkriptimin e trafikut ndërmjet klientit dhe serverit, përdor një SSLSocket dhe një PrintWriter për të dërguar mesazhin në mënyrë të sigurt.
+Orkestron rrjedhën e plotë të Handshake:\
+ClientHello → ServerHello\
+ServerKeyExchange → ChangeCipherSpec\
+Finished
 
-## Finished.java
-Kjo klasë përfaqëson dërgimin e mesazhit Finished, i cili sinjalizon përfundimin e handshake-it SSL/TLS nga ana e serverit. Ajo përdor një SSLSocket për të dërguar një mesazh të thjeshtë tekstual "Finished" përmes rrjetit. Ky veprim konfirmon që serveri ka përfunduar procesin e sigurt të inicializimit të komunikimit me klientin.
+📄 ChangeCipherSpec.java
 
+Sinjalizon që komunikimi do të jetë i enkriptuar.
 
+📄 Finished.java
 
-## Handshake.java
-Kjo klasë është përgjegjëse për simulimin e procesit të handshake-it SSL nga ana e serverit. Pasi pranon mesazhin fillestar ClientHello, ajo i përgjigjet me ServerHello, simulon shkëmbimin e çelësave, dërgon mesazhet ChangeCipherSpec dhe Finished, dhe më pas fillon komunikimin e sigurt me klientin. Ajo përdor një SSLSocket dhe një thread për çdo klient, duke mundësuar trajtim paralel të lidhjeve të shumëfishta.
+Dërgon mesazhin "Finished" për të përfunduar Handshake.
 
-## ServerHello.java
-Kjo klasë përfaqëson mesazhin ServerHello në rrjedhën e handshake-it SSL/TLS. Pas pranimit të ClientHello, serveri përdor këtë klasë për të dërguar një mesazh te klienti për të sinjalizuar se është gati për të vazhduar me negociatat e sigurisë. Komunikimi realizohet përmes SSLSocket dhe PrintWriter.
+📄 Handshake.java
 
-## ServerKeyExchange.java
-Kjo klasë simulon dërgimin e mesazhit "ServerKeyExchange" gjatë procesit të handshake-it SSL/TLS. Në një sistem real, ky mesazh do të përmbante parametrat kriptografikë që klienti do t’i përdorë për të krijuar një çelës të përbashkët. Në këtë implementim të thjeshtësuar, ajo dërgon vetëm një string “ServerKeyExchange” për të treguar që kjo fazë e shkëmbimit të çelësave po ndodh. Ajo përdor një SSLSocket për të realizuar komunikimin dhe një PrintWriter për të dërguar mesazhin te klienti
+Menaxhon procesin e Handshake në server.\
+Trajton shumë klientë në mënyrë paralele.
 
-## ServerApp.java
-Kjo është klasa kryesore që simulon një server SSL. Ajo inicializon një SSLServerSocket duke përdorur një keystore dhe një protokoll TLSv1.2. Për çdo klient që lidhet, ajo krijon një thread të veçantë që trajton komunikimin me të. Gjatë lidhjes, ajo kryen simulimin e handshake-it dhe më pas lejon komunikim të sigurt përmes socket-it SSL.
+📄 ServerHello.java
 
-## ClientApp.java
-Kjo është klasa kryesore që simulon një klient SSL. Ajo krijon një lidhje të sigurt me serverin përmes SSLSocket, duke përdorur një TrustStore që përmban certifikatën e serverit. Pas kryerjes së handshake-it me mesazhet ClientHello dhe pritjes së ServerHello, përdoruesi mund të shkëmbejë mesazhe me serverin në mënyrë të sigurt. Lidhja mbyllet nëse dërgohet komanda “exit”
+Simulon mesazhin "ServerHello".
 
+📄 ServerKeyExchange.java
 
+Dërgon parametrat e shkëmbimit të çelësave.
 
+📄 ServerApp.java
+
+Krijon një SSLServerSocket të sigurt.\
+Pranon shumë klientë njëkohësisht.
+
+📄 ClientApp.java
+
+Lidhet me serverin me TrustStore.\
+Kryen Handshake dhe dërgon mesazhe të enkriptuara.
+
+## 👤 Autorët:
+- Leon Troni
+- Leona Zullufi
+- Leonita Rama
+- Liridona Kurrumeli
