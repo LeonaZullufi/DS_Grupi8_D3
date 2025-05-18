@@ -49,7 +49,7 @@ public class KeyExchangeManager {
             this.sharedSecret = new SecretKeySpec(secretBytes, 0, 16, "AES");
             System.out.println(" ✅ Shared AES key generated.");
         } catch (Exception e) {
-            System.out.println(" ❌ Failed to generate shared secret: " + e.getMessage());
+            System.out.println("❌ Failed to generate shared secret: " + e.getMessage());
         }
     }
 
