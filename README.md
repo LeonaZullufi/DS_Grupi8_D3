@@ -22,27 +22,34 @@ Ky projekt simulon një proces të plotë të SSL/TLS Handshake midis një **kli
 1. Hap projektin në IDE-në tuaj (Eclipse, IntelliJ, etj.)
 2. Së pari ekzekuto ServerApp.java për të nisur serverin.
 3. Pastaj ekzekuto ClientApp.java për të nisur klientin
- ```
+ 
  Përmes terminalit:
 1. Hap terminalin në IntelliJ (alt+f12) sigurohu qe je ne rrenjen e projektit:
- p.sh cd C:\Users\HP\IdeaProjects\DS_Grupi8_D3
+ p.sh 
+```
+cd C:\Users\HP\IdeaProjects\DS_Grupi8_D3
+```
  
 2. Kompilo të gjitha .java nga të gjitha nënfolderët
+```
 javac -d out (Get-ChildItem -Recurse -Filter *.java | ForEach-Object { $_.FullName })
+```
 Kjo do i kompilojë të gjitha klasat dhe do i ruajë në folderin out.
 
 3. Ekzekuto Server-in
+```
 java -cp out server.ServerApp
-
+```
 4. Ekzekuto Client-in (në një dritare të re të terminalit)
+```
 java -cp out client.ClientApp
-
- ```
+```
+ 
 ## 📋 Udhëzime për përdorim
-Fillimisht nisni serverin
-Pastaj nisni klientin
-Ndiqni udhëzimet në ekran për të shkëmbyer mesazhe të sigurta
-Shkruani "exit" për të mbyllur lidhjen
+- Fillimisht nisni serverin
+- Pastaj nisni klientin
+- Ndiqni udhëzimet në ekran për të shkëmbyer mesazhe të sigurta
+- Shkruani "exit" për të mbyllur lidhjen
 
 
 🔄 Logjika e rrjedhës\
