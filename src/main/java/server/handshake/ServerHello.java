@@ -13,22 +13,13 @@ public class ServerHello {
 
     public void sendServerHello() {
         try {
+            System.out.println("🤝 Sending ServerHello...");
+
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println("ServerHello");
             System.out.println("📤 Sent: ServerHello");
         } catch (IOException e) {
             System.out.println("❌ Failed to send ServerHello.");
-            e.printStackTrace();
-        }
-    }
-
-    public void sendChangeCipherSpec() {
-        try {
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            out.println("ChangeCipherSpec");
-            System.out.println("📤 Sent: ChangeCipherSpec");
-        } catch (IOException e) {
-            System.out.println("❌ Failed to send ChangeCipherSpec.");
             e.printStackTrace();
         }
     }
