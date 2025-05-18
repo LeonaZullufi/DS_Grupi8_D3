@@ -35,7 +35,7 @@ public class ClientApp {
             // ✅ Startimi i Handshake
             sslSocket.startHandshake();
 
-            System.out.println("🌐 U lidh me serverin SSL në " + SERVER_HOST + ":" + SERVER_PORT);
+            System.out.println("🌐 U lidh me serverin SSL në  " + SERVER_HOST + ":" + SERVER_PORT);
 
             try (
                     BufferedReader in = new BufferedReader(new InputStreamReader(sslSocket.getInputStream()));
