@@ -46,16 +46,16 @@ Shkruani "exit" për të mbyllur lidhjen
 
 
 🔄 Logjika e rrjedhës\
-Kur ekzekutoni ServerApp:
+Kur ekzekutoni ServerApp:\
 ![img.png](img.png)
 
-Kur ekzekutoni ClientApp pas ServerApp:
+Kur ekzekutoni ClientApp pas ServerApp:\
 ![img_1.png](img_1.png)
 
-Shënoni kodin për serverin:
+Shënoni kodin për serverin:\
 ![img_2.png](img_2.png)
 
-Pamja tek serveri:
+Pamja tek serveri:\
 ![img_3.png](img_3.png)
 
 
